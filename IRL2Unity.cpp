@@ -55,6 +55,10 @@ struct PhysicsCalc {
     static double PotentialEnergy(double massKg, double heightMeters, double gravity = 9.81) {
         return massKg * gravity * heightMeters;
     }
+
+    static double DragForce(double airDensity, double velocity, double dragCoefficient, double area) {
+        return 0.5 * airDensity * velocity * velocity * dragCoefficient * area;
+    }
 };
 
 void ClearInput() {
@@ -63,7 +67,7 @@ void ClearInput() {
 }
 
 void ShowMenu() {
-    std::cout << "\n=== IRL2Unity ===\n";
+    std::cout << "=== IRL2Unity ===\n";
     std::cout << "1. Pounds/Ounces to Kilograms\n";
     std::cout << "2. Kilograms to Pounds/Ounces\n";
     std::cout << "3. Feet/Inches to Meters\n";
@@ -71,6 +75,7 @@ void ShowMenu() {
     std::cout << "5. Calculate Force (N = kg * m/s^2)\n";
     std::cout << "6. Calculate Kinetic Energy (J)\n";
     std::cout << "7. Calculate Potential Energy (J)\n";
+    std::cout << "8. Calculate Drag Force (F = 0.5 * p * v^2 * Cd * A)\n";
     std::cout << "0. Exit\n";
     std::cout << "Select option: ";
 }
@@ -150,6 +155,20 @@ int main() {
             std::cin >> height;
             double pe = PhysicsCalc::PotentialEnergy(mass, height);
             std::cout << "Potential Energy = " << pe << " J\n";
+            break;
+        }
+        case 8: {
+            double airDensity, velocity, dragCoeff, area;
+            std::cout << "Enter air density (kg/m^3): ";
+            std::cin >> airDensity;
+            std::cout << "Enter velocity (m/s): ";
+            std::cin >> velocity;
+            std::cout << "Enter drag coefficient (Cd): ";
+            std::cin >> dragCoeff;
+            std::cout << "Enter cross-sectional area (m^2): ";
+            std::cin >> area;
+            double drag = PhysicsCalc::DragForce(airDensity, velocity, dragCoeff, area);
+            std::cout << "Drag Force = " << drag << " N\n";
             break;
         }
         case 0:
